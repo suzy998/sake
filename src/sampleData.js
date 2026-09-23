@@ -1,0 +1,62 @@
+export const SAMPLE_DRINKS = [
+  {
+    type: 'sake',
+    name: '新政 No.6 S-type',
+    brewery: '新政酒造',
+    prefecture: '秋田県',
+    sakeType: '純米酒',
+    sakeRice: 'あきた酒こまち',
+    sakeMeterValue: '+1.0',
+    alcoholPercent: 14,
+    purchasePlace: '秋田特産品プラザ / はせがわ酒店',
+    price: 3800,
+    drankAt: '2026-09-20',
+    note: '口に含んだ瞬間に広がるフレッシュなガス感と、白桃のようなジューシーで上品な酸味。余韻も非常にキレが良く、カルパッチョや白身魚の刺身と相性抜群。',
+    tags: ['お気に入り', '冷酒', 'フルーティー']
+  },
+  {
+    type: 'sake',
+    name: '而今 特別純米 火入れ',
+    brewery: '木屋正酒造',
+    prefecture: '三重県',
+    sakeType: '特別純米酒',
+    sakeRice: '山田錦・八反錦',
+    sakeMeterValue: '±0',
+    alcoholPercent: 15.5,
+    purchasePlace: '正規特約店にて購入',
+    price: 3300,
+    drankAt: '2026-09-15',
+    note: '甘味と酸味のバランスが完璧。メロンのような芳醇な立ち香と、口当たりの柔らかさが素晴らしい。',
+    tags: ['定番', '和食に合う']
+  },
+  {
+    type: 'wine',
+    name: 'シャトー・モンペラ ルージュ 2019',
+    region: 'フランス / ボルドー (コート・ド・ボルドー)',
+    grapeVariety: 'メルロー 80%, カベルネ・フラン 10%, カベルネ・ソーヴィニヨン 10%',
+    wineType: 'red',
+    vintage: 2019,
+    producer: 'デスパーニュ家',
+    alcoholPercent: 14.5,
+    purchasePlace: 'エノテカ 丸の内店',
+    price: 4200,
+    drankAt: '2026-09-10',
+    note: 'カシスやダークチェリーの濃縮感あるアロマに、かすかなトースト香とスパイスのニュアンス。タンニンは滑らかで厚みがあり、ローストビーフとの相性が最高。',
+    tags: ['赤ワイン', 'ボルドー', '肉料理']
+  },
+  {
+    type: 'wine',
+    name: 'クラウディ ベイ ソーヴィニヨン・ブラン 2022',
+    region: 'ニュージーランド / マールボロ',
+    grapeVariety: 'ソーヴィニヨン・ブラン 100%',
+    wineType: 'white',
+    vintage: 2022,
+    producer: 'Cloudy Bay',
+    alcoholPercent: 13,
+    purchasePlace: '成城石井',
+    price: 3980,
+    drankAt: '2026-09-02',
+    note: 'グレープフルーツやパッションフルーツの鮮烈なシトラス香と、爽やかなハーブの香り。キリッとしたミネラル感と清涼感が心地よい。',
+    tags: ['白ワイン', '爽やか', '魚介']
+  }
+];
