@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#07090e" />
+    <meta name="description" content="飲んだお酒（日本酒・ワイン・ビール・ウイスキー等）をスマートに記録・管理する個人用Webアプリ" />
+    <link rel="manifest" href="./manifest.json" />
+    <title>Sake & Wine Cellar Log | お酒の記録帳</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;600;700;900&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="./assets/index-BM6Qmc5Q.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DAyGHre-.css">
+  </head>
+  <body>
+    <div id="app">
+      <!-- ヘッダー -->
+      <header class="app-header">
+        <a href="#" class="brand" id="brand-home-link">
+          <div class="brand-icon">🍶</div>
+          <div class="brand-text">
+            <div class="brand-title">酒譜 <span>CELLAR LOG</span></div>
+            <div class="brand-subtitle">Personal Tasting Journal</div>
+          </div>
+        </a>
+        <div class="header-actions">
+          <button id="btn-open-settings" class="btn btn-secondary btn-icon-only" title="設定・バックアップ">
+            <i data-lucide="settings" style="width: 20px; height: 20px;"></i>
+          </button>
+          <button id="btn-open-add" class="btn btn-primary" title="新しいお酒を記録">
+            <i data-lucide="plus" style="width: 18px; height: 18px;"></i>
+            <span>お酒を記録</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- 統計サマリー -->
+      <section id="stats-section" class="stats-container">
+        <!-- JSで動的描画 -->
+      </section>
+
+      <!-- コントロールバー（フィルタ・検索・ソート） -->
+      <section class="controls-panel">
+        <div class="category-tabs" id="category-tabs">
+          <!-- JSで動的描画 -->
+        </div>
+        <div class="search-sort-group">
+          <div class="search-wrapper">
+            <i data-lucide="search" class="search-icon" style="width: 16px; height: 16px;"></i>
+            <input type="text" id="search-input" class="search-input" placeholder="銘柄、酒蔵、品種、産地で検索..." />
+          </div>
+          <select id="sort-select" class="sort-select">
+            <option value="drankAt-desc">飲んだ日 (新しい順)</option>
+            <option value="drankAt-asc">飲んだ日 (古い順)</option>
+            <option value="price-desc">価格 (高い順)</option>
+            <option value="price-asc">価格 (安い順)</option>
+            <option value="name-asc">銘柄名 (五十音順)</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- お酒カードグリッド -->
+      <main>
+        <div id="drinks-grid" class="drinks-grid">
+          <!-- JSで動的描画 -->
+        </div>
+      </main>
+    </div>
+
+    <!-- 登録・編集モーダル -->
+    <div id="modal-form" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title" id="form-modal-title">
+            <i data-lucide="wine" style="width: 22px; height: 22px;"></i>
+            <span>お酒を記録する</span>
+          </div>
+          <button class="modal-close-btn" id="btn-close-form" title="閉じる">
+            <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+          </button>
+        </div>
+        <form id="drink-form">
+          <input type="hidden" id="edit-drink-id" value="" />
+          <div class="modal-body">
+            <!-- カテゴリ選択 -->
+            <div class="form-group">
+              <label class="form-label">お酒の種類 <span class="form-label-req">*</span></label>
+              <div class="type-selector" id="form-type-selector">
+                <!-- JSで動的描画 -->
+              </div>
+            </div>
+
+            <!-- 銘柄名 -->
+            <div class="form-group">
+              <label for="input-name" class="form-label">銘柄名 / 商品名 <span class="form-label-req">*</span></label>
+              <input type="text" id="input-name" class="form-control" placeholder="例: 新政 No.6 S-type / シャトー・マルゴー" required />
+            </div>
+
+            <!-- 写真アップロード -->
+            <div class="form-group">
+              <label class="form-label">写真（ラベル・ボトル）</label>
+              <div class="image-upload-area" id="image-drop-area">
+                <input type="file" id="input-photo" accept="image/*" style="display: none;" />
+                <div id="image-preview-container" style="display: none;" class="image-preview-wrapper">
+                  <img id="image-preview-img" class="image-preview" src="" alt="プレビュー" />
+                  <button type="button" id="btn-remove-photo" class="image-remove-btn" title="写真を削除">
+                    <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                  </button>
+                </div>
+                <div id="image-upload-placeholder">
+                  <i data-lucide="camera" style="width: 36px; height: 36px; margin-bottom: 0.5rem; opacity: 0.6;"></i>
+                  <div style="font-size: 0.88rem; font-weight: 500;">写真を選択 または 撮影</div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">タップしてライブラリから選択またはカメラ起動</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 日本酒専用フィールド群 -->
+            <div id="fields-sake" class="category-specific-fields">
+              <div class="form-row-2" style="margin-bottom: 1rem;">
+                <div class="form-group">
+                  <label for="input-brewery" class="form-label">酒蔵（蔵元）</label>
+                  <input type="text" id="input-brewery" class="form-control" placeholder="例: 新政酒造 / 木屋正酒造" />
+                </div>
+                <div class="form-group">
+                  <label for="input-prefecture" class="form-label">都道府県</label>
+                  <input type="text" id="input-prefecture" list="prefectures-list" class="form-control" placeholder="例: 秋田県 / 三重県" />
+                  <datalist id="prefectures-list"></datalist>
+                </div>
+              </div>
+
+              <div class="form-row-3" style="margin-bottom: 1rem;">
+                <div class="form-group">
+                  <label for="input-sake-type" class="form-label">特定名称 / タイプ</label>
+                  <input type="text" id="input-sake-type" list="sake-types-list" class="form-control" placeholder="例: 純米大吟醸" />
+                  <datalist id="sake-types-list"></datalist>
+                </div>
+                <div class="form-group">
+                  <label for="input-sake-rice" class="form-label">酒米（原料米）</label>
+                  <input type="text" id="input-sake-rice" class="form-control" placeholder="例: 山田錦 / 雄町" />
+                </div>
+                <div class="form-group">
+                  <label for="input-sake-meter" class="form-label">日本酒度</label>
+                  <input type="text" id="input-sake-meter" class="form-control" placeholder="例: +3.0 / -1.5" />
+                </div>
+              </div>
+            </div>
+
+            <!-- ワイン専用フィールド群 -->
+            <div id="fields-wine" class="category-specific-fields" style="display: none;">
+              <div class="form-row-2" style="margin-bottom: 1rem;">
+                <div class="form-group">
+                  <label for="input-wine-type" class="form-label">ワインの種類</label>
+                  <select id="input-wine-type" class="form-control">
+                    <!-- JSで動的生成 -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="input-region" class="form-label">産地（国・地域）</label>
+                  <input type="text" id="input-region" class="form-control" placeholder="例: フランス / ボルドー" />
+                </div>
+              </div>
+
+              <div class="form-row-2" style="margin-bottom: 1rem;">
+                <div class="form-group">
+                  <label for="input-grape" class="form-label">葡萄の種類（品種）</label>
+                  <input type="text" id="input-grape" class="form-control" placeholder="例: カベルネ・ソーヴィニヨン / ピノ・ノワール" />
+                </div>
+                <div class="form-group">
+                  <label for="input-vintage" class="form-label">ヴィンテージ（収穫年）</label>
+                  <input type="number" id="input-vintage" class="form-control" placeholder="例: 2019" min="1900" max="2100" />
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 1rem;">
+                <label for="input-producer" class="form-label">生産者 / ワイナリー</label>
+                <input type="text" id="input-producer" class="form-control" placeholder="例: ドメーヌ・ルロワ / シャトー・ラトゥール" />
+              </div>
+            </div>
+
+            <!-- その他・ビール・ウイスキー用フィールド -->
+            <div id="fields-other" class="category-specific-fields" style="display: none;">
+              <div class="form-row-2" style="margin-bottom: 1rem;">
+                <div class="form-group">
+                  <label for="input-origin" class="form-label">産地 / 蒸留所 / メーカー</label>
+                  <input type="text" id="input-origin" class="form-control" placeholder="例: スコットランド / 山崎蒸溜所" />
+                </div>
+                <div class="form-group">
+                  <label for="input-style" class="form-label">スタイル / 原材料</label>
+                  <input type="text" id="input-style" class="form-control" placeholder="例: シングルモルト / IPA / 芋" />
+                </div>
+              </div>
+            </div>
+
+            <!-- 共通フィールド: アルコール度数、価格、購入場所、飲んだ日 -->
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="input-drank-at" class="form-label">飲んだ日</label>
+                <input type="date" id="input-drank-at" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-alcohol" class="form-label">アルコール度数 (%)</label>
+                <input type="number" step="0.1" id="input-alcohol" class="form-control" placeholder="例: 15.0" />
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="input-price" class="form-label">値段 (円)</label>
+                <input type="number" id="input-price" class="form-control" placeholder="例: 3500" min="0" step="10" />
+              </div>
+              <div class="form-group">
+                <label for="input-place" class="form-label">買った場所 / 飲んだお店</label>
+                <input type="text" id="input-place" class="form-control" placeholder="例: 近所の酒屋 / 成城石井 / 居酒屋〇〇" />
+              </div>
+            </div>
+
+            <!-- 自由入力テキスト（ノート） -->
+            <div class="form-group">
+              <label for="input-note" class="form-label">自由入力テキスト（テイスティング感想・香り・ペアリング料理など）</label>
+              <textarea id="input-note" rows="4" class="form-control" placeholder="香りの印象、味わい、温度帯（冷酒/ぬる燗/室温）、合わせたおつまみ、シチュエーションなどを自由にメモ..."></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="btn-cancel-form">キャンセル</button>
+            <button type="submit" class="btn btn-primary" id="btn-submit-form">
+              <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+              <span>保存する</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- 詳細表示モーダル -->
+    <div id="modal-detail" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title" id="detail-modal-title">お酒の詳細</div>
+          <button class="modal-close-btn" id="btn-close-detail" title="閉じる">
+            <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+          </button>
+        </div>
+        <div class="modal-body" id="detail-modal-body">
+          <!-- JSで動的描画 -->
+        </div>
+        <div class="modal-footer" style="justify-content: space-between;">
+          <button type="button" class="btn btn-danger btn-sm" id="btn-delete-drink">
+            <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+            <span>削除</span>
+          </button>
+          <div style="display: flex; gap: 0.5rem;">
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-close-detail-footer">閉じる</button>
+            <button type="button" class="btn btn-primary btn-sm" id="btn-edit-drink">
+              <i data-lucide="edit-3" style="width: 16px; height: 16px;"></i>
+              <span>編集する</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 設定・バックアップモーダル -->
+    <div id="modal-settings" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">
+            <i data-lucide="database" style="width: 22px; height: 22px;"></i>
+            <span>データ管理・バックアップ</span>
+          </div>
+          <button class="modal-close-btn" id="btn-close-settings" title="閉じる">
+            <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="settings-section">
+            <!-- バックアップ (エクスポート) -->
+            <div class="settings-card">
+              <div class="settings-card-title">
+                <i data-lucide="download" style="width: 18px; height: 18px; color: var(--accent-sake);"></i>
+                <span>データのエクスポート (バックアップ)</span>
+              </div>
+              <div class="settings-card-desc">
+                登録したお酒データと写真画像を含む完全なバックアップ（JSONファイル）をダウンロードします。機種変更や定期保存にご活用ください。
+              </div>
+              <div>
+                <button type="button" class="btn btn-primary btn-sm" id="btn-export-json">
+                  <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+                  <span>JSONを書き出す</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 復元 (インポート) -->
+            <div class="settings-card">
+              <div class="settings-card-title">
+                <i data-lucide="upload" style="width: 18px; height: 18px; color: var(--accent-wine);"></i>
+                <span>データのインポート (復元)</span>
+              </div>
+              <div class="settings-card-desc">
+                以前エクスポートしたバックアップJSONファイルを読み込んでデータを追加・復元します。
+              </div>
+              <div>
+                <input type="file" id="input-import-json" accept=".json" style="display: none;" />
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-trigger-import">
+                  <i data-lucide="upload" style="width: 16px; height: 16px;"></i>
+                  <span>JSONファイルを読み込む</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- サンプルデータ投入 -->
+            <div class="settings-card">
+              <div class="settings-card-title">
+                <i data-lucide="sparkles" style="width: 18px; height: 18px; color: var(--accent-gold);"></i>
+                <span>サンプルデータの追加</span>
+              </div>
+              <div class="settings-card-desc">
+                日本酒やワインの初期サンプルデータ（4件）を追加して表示を試すことができます。
+              </div>
+              <div>
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-seed-sample">
+                  <i data-lucide="plus-circle" style="width: 16px; height: 16px;"></i>
+                  <span>サンプルデータを追加</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 全データ消去 -->
+            <div class="settings-card" style="border-color: rgba(239, 68, 68, 0.2);">
+              <div class="settings-card-title" style="color: #f87171;">
+                <i data-lucide="alert-triangle" style="width: 18px; height: 18px;"></i>
+                <span>全データの消去</span>
+              </div>
+              <div class="settings-card-desc">
+                ブラウザの IndexedDB に保存されているすべてのお酒データを完全に消去します。この操作は取り消せません。
+              </div>
+              <div>
+                <button type="button" class="btn btn-danger btn-sm" id="btn-clear-db">
+                  <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                  <span>全データをリセット</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-close-settings-footer">閉じる</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- トースト通知 -->
+    <div id="toast-container" class="toast-container"></div>
+
+  </body>
+</html>

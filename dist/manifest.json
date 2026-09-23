@@ -1,0 +1,17 @@
+{
+  "name": "酒譜 CELLAR LOG - お酒の記録帳",
+  "short_name": "酒譜",
+  "description": "日本酒・ワイン・クラフトビール等の個人用テイスティングログ",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#07090e",
+  "theme_color": "#07090e",
+  "icons": [
+    {
+      "src": "./vite.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
